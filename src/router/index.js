@@ -1,10 +1,10 @@
-
 import { createRouter, createWebHistory } from 'vue-router';
 import searchTable from '../views/searchTable.vue';
 import buttonTest from '../views/buttonTest.vue';
 import borderTest from '@/views/borderTest.vue';
 import linkIcon from '../views/linkIcon.vue'; 
 import formTest from '@/views/formTest.vue';
+import traceIDtoPlum from '@/views/traceIDtoPlum.vue';
 
 const routes = [
   { path: '/buttonTest', component: buttonTest },
@@ -12,8 +12,7 @@ const routes = [
   { path: '/searchTable', component: searchTable },
   { path: '/linkIcon', component: linkIcon },
   { path: '/formTest', component: formTest },
-
-  
+  { path: '/traceIDtoPlum', component: traceIDtoPlum },
 ];
 
 const router = createRouter({

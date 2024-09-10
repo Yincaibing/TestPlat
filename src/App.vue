@@ -29,8 +29,9 @@
             <template #title><el-icon><icon-menu /></el-icon>Igloo testPlatform</template>
             <el-menu-item-group>
               <!-- <template #title><span class="custom-title">testTool</span></template> -->
-              <el-menu-item index="2-1" @click="navigateToOption('2-1')">searchTable</el-menu-item>
+              <el-menu-item index="2-1" @click="navigateToOption('2-1')">searchData</el-menu-item>
               <el-menu-item index="2-2" @click="navigateToOption('2-2')">AI测试</el-menu-item>
+              <el-menu-item index="2-3" @click="navigateToOption('2-3')">traceIDtoPlum</el-menu-item>
             </el-menu-item-group>
             <!-- <el-menu-item-group >
               <template #title>
@@ -160,10 +161,13 @@ export default {
           router.push({ path: '/linkIcon' });
           break;
         case '1-4':
-          router.push({ path: '/FormTest' });
+          router.push({ path: '/formTest' });
           break;
         case '2-1':
           router.push({ path: '/searchTable' });
+          break;
+        case '2-3':
+          router.push({ path: '/traceIDtoPlum' });
           break;
         default:
           isTableVisible.value = true; // 其他情况下显示表格
@@ -207,7 +211,7 @@ export default {
   font-size: 12px;
   font-style: italic;
   background-color: #409EFF; /*设置背景颜色为黑色*/
-  color: white; /* 可选：设置文本颜色为白色以增强可读性 */
+  color: white; /* 可选：设置文本颜色为白色以增���可读性 */
 
 }
 .el-aside {
