@@ -1,0 +1,19 @@
+module.exports = {
+     parser: '@typescript-eslint/parser',
+     extends: [
+       'plugin:vue/vue3-recommended',
+       'plugin:@typescript-eslint/recommended',
+       'prettier'
+     ],
+     parserOptions: {
+       ecmaVersion: 2020,
+       sourceType: 'module',
+       ecmaFeatures: {
+        jsx: true,
+    },
+    plugins: ['vue', '@typescript-eslint'],
+     },
+     rules: {
+       // 在这里添加你自己的规则
+     }
+   };
