@@ -8,7 +8,17 @@ import {
   ElSubMenu, ElMenuItemGroup, ElIcon, ElScrollbar, ElMessage, ElDropdownMenu, 
   ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn, ElLink, ElUpload, ElDialog,
   // 新增的组件
-  ElInput, ElForm, ElFormItem, ElMention, ElDatePicker, ElTimePicker, ElCheckbox, ElCheckboxGroup,ElRadioGroup, ElRadio
+  ElInput, ElForm, ElFormItem, ElMention, ElDatePicker, ElTimePicker, ElCheckbox, ElCheckboxGroup,ElRadioGroup, ElRadio,
+  ElSelect,
+  ElEmpty,
+  ElRow,
+  ElOption,
+  ElCollapse,
+  ElCollapseItem,
+  ElSlider,
+  ElCard,
+  ElCol,
+  ElProgress
 } from 'element-plus'; // 引入部分组件
 import defineComponent from './views/homeEcharts.vue' // 确保路径正确
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'; //引入所有组件
@@ -19,7 +29,9 @@ const app = createApp(App);
  ElSubMenu, ElMenuItemGroup, ElIcon, ElScrollbar, ElMessage, ElDropdownMenu, 
  ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn, ElLink, ElUpload, ElDialog,
  // 新增的组件
- ElInput, ElForm, ElFormItem, ElMention, ElDatePicker, ElTimePicker, ElCheckbox, ElCheckboxGroup,ElRadioGroup, ElRadio
+ ElInput, ElForm, ElFormItem, ElMention, ElDatePicker, ElTimePicker, ElCheckbox, ElCheckboxGroup,ElRadioGroup, 
+ ElRadio,ElSelect,ElEmpty,ElRow,ElOption,ElCollapse,ElCollapseItem,
+ ElProgress,ElSlider,ElCard,ElCol
 ].forEach(component => app.component(component.name, component));
 
 app.component(defineComponent.name, defineComponent);

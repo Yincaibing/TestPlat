@@ -1,7 +1,6 @@
 <template>
   <div class="common-layout">
     <el-container class="el-container">
-
       <el-aside class="el-aside">
       <el-scrollbar>
         <el-menu :default-openeds="['1', '3']" :router=true background-color="#409EFF">
@@ -166,6 +165,9 @@ export default {
         case '2-1':
           router.push({ path: '/searchTable' });
           break;
+        case '2-2':
+          router.push({ path: '/ai-testing' });
+          break;
         case '2-3':
           router.push({ path: '/traceIDtoPlum' });
           break;
@@ -211,7 +213,7 @@ export default {
   font-size: 12px;
   font-style: italic;
   background-color: #409EFF; /*设置背景颜色为黑色*/
-  color: white; /* 可选：设置文本颜色为白色以增���可读性 */
+  color: white; /* 可选：设置文本颜色为白色以增可读性 */
 
 }
 .el-aside {

@@ -5,6 +5,7 @@ import borderTest from '@/views/borderTest.vue';
 import linkIcon from '../views/linkIcon.vue'; 
 import formTest from '@/views/formTest.vue';
 import traceIDtoPlum from '@/views/traceIDtoPlum.vue';
+import AITesting from '@/views/AITesting.vue';
 
 const routes = [
   { path: '/buttonTest', component: buttonTest },
@@ -13,6 +14,11 @@ const routes = [
   { path: '/linkIcon', component: linkIcon },
   { path: '/formTest', component: formTest },
   { path: '/traceIDtoPlum', component: traceIDtoPlum },
+  {
+    path: '/ai-testing',
+    name: 'AITesting',
+    component: AITesting
+  },
 ];
 
 const router = createRouter({
