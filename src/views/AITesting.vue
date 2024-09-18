@@ -2,9 +2,12 @@
 <template>
   <div class="ai-testing">
     <h2>AI 代码分析</h2>
-    <el-form :model="form" label-width="120px">
-      <el-form-item label="项目路径">
+    <el-form :model="form" label-width="120px" class="project-form">
+      <el-form-item label="项目路径" class="project-path-item">
         <el-input v-model="form.projectPath" placeholder="输入项目路径"></el-input>
+      </el-form-item>
+      <el-form-item label="是否脱敏">
+        <el-switch v-model="form.desensitize" active-text="是" inactive-text="否"></el-switch>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="initializeSystem" :loading="initializing">初始化系统</el-button>
@@ -43,6 +46,8 @@ import { ElMessage } from 'element-plus';
 
 const form = reactive({
   projectPath: localStorage.getItem('projectPath') || '',
+  desensitize: localStorage.getItem('desensitize') === 'true' || true, // 默认为true
+
 });
 
 const questionForm = reactive({
@@ -55,9 +60,13 @@ const analyzing = ref(false);
 const initialized = ref(localStorage.getItem('initialized') === 'true');
 const chatHistoryRef = ref(null);
 
-// 监听 projectPath 的变化并保存到 localStorage
+// 监听 projectPath 和 desensitize 的变化并保存到 localStorage
 watch(() => form.projectPath, (newPath) => {
   localStorage.setItem('projectPath', newPath);
+});
+
+watch(() => form.desensitize, (newValue) => {
+  localStorage.setItem('desensitize', newValue);
 });
 
 // 监听 chatHistory 的变化并保存到 localStorage
@@ -132,6 +141,16 @@ onMounted(async () => {
 <style scoped>
 .ai-testing {
   padding: 20px;
+}
+.project-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.project-path-item {
+  margin-bottom: 20px;
+}
+.project-path-item :deep(.el-form-item__content) {
+  justify-content: flex-start;
 }
 .chat-container {
   margin-top: 20px;
