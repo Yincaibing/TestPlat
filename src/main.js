@@ -18,7 +18,10 @@ import {
   ElSlider,
   ElCard,
   ElCol,
-  ElProgress
+  ElProgress,
+  ElSwitch,
+  ElButtonGroup,
+  ElLoading
 } from 'element-plus'; // 引入部分组件
 import defineComponent from './views/homeEcharts.vue' // 确保路径正确
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'; //引入所有组件
@@ -31,7 +34,7 @@ const app = createApp(App);
  // 新增的组件
  ElInput, ElForm, ElFormItem, ElMention, ElDatePicker, ElTimePicker, ElCheckbox, ElCheckboxGroup,ElRadioGroup, 
  ElRadio,ElSelect,ElEmpty,ElRow,ElOption,ElCollapse,ElCollapseItem,
- ElProgress,ElSlider,ElCard,ElCol
+ ElProgress,ElSlider,ElCard,ElCol,ElSwitch,ElButtonGroup,ElLoading
 ].forEach(component => app.component(component.name, component));
 
 app.component(defineComponent.name, defineComponent);

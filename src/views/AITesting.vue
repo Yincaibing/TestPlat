@@ -1,166 +1,159 @@
 <!-- src/views/AITesting.vue -->
 <template>
-    <div class="ai-testing-container">
-      <h2>AI 代码分析工具</h2>
-      <p>自动分析Go项目并生成技术设计文档</p>
-  
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-card class="control-panel">
-            <h3>项目配置</h3>
-            <el-form :model="form" label-width="120px">
-              <el-form-item label="项目路径">
-                <el-input v-model="form.projectPath" placeholder="输入Go项目路径"></el-input>
-              </el-form-item>
-              <el-form-item label="分析深度">
-                <el-slider v-model="form.analysisDepth" :min="1" :max="5" :step="1" show-stops></el-slider>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="startAnalysis" :loading="analyzing">开始分析</el-button>
-              </el-form-item>
-            </el-form>
-  
-            <el-progress v-if="analyzing" :percentage="analysisProgress" :format="progressFormat"></el-progress>
-          </el-card>
-        </el-col>
-  
-        <el-col :span="16">
-          <el-card class="result-panel" v-loading="analyzing">
-            <template #header>
-              <div class="card-header">
-                <span>分析结果</span>
-                <el-button v-if="analysisComplete" type="primary" size="small" @click="exportDocument">导出文档</el-button>
-              </div>
-            </template>
-            <div v-if="analysisComplete">
-              <el-collapse v-model="activeNames">
-                <el-collapse-item v-for="(section, index) in documentSections" :key="index" :title="section.title" :name="index">
-                  <div v-html="section.content"></div>
-                </el-collapse-item>
-              </el-collapse>
-            </div>
-            <div v-else-if="!analyzing">
-              <el-empty description="尚未开始分析"></el-empty>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-  
-      <el-dialog v-model="exportDialogVisible" title="导出文档" width="30%">
-        <el-form :model="exportForm">
-          <el-form-item label="导出格式">
-            <el-select v-model="exportForm.format">
-              <el-option label="Markdown" value="md"></el-option>
-              <el-option label="PDF" value="pdf"></el-option>
-              <el-option label="HTML" value="html"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="exportDialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="confirmExport">确认</el-button>
-          </span>
-        </template>
-      </el-dialog>
+  <div class="ai-testing">
+    <h2>AI 代码分析</h2>
+    <el-form :model="form" label-width="120px">
+      <el-form-item label="项目路径">
+        <el-input v-model="form.projectPath" placeholder="输入项目路径"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="initializeSystem" :loading="initializing">初始化系统</el-button>
+      </el-form-item>
+    </el-form>
+
+    <div v-if="initialized" class="chat-container">
+      <div class="chat-history" ref="chatHistoryRef">
+        <div v-for="(message, index) in chatHistory" :key="index" :class="['message', message.type]">
+          <strong>{{ message.type === 'user' ? '你：' : 'AI：' }}</strong>
+          <p>{{ message.content }}</p>
+        </div>
+      </div>
+
+      <el-form :model="questionForm" label-width="120px">
+        <el-form-item label="问题">
+          <el-input 
+            v-model="questionForm.question" 
+            type="textarea" 
+            :rows="4" 
+            placeholder="输入你的问题"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="askQuestion" :loading="analyzing">提问</el-button>
+        </el-form-item>
+      </el-form>
     </div>
-  </template>
-  
-  <script>
-  import { ref, reactive } from 'vue';
-  import { ElMessage } from 'element-plus';
-  
-  export default {
-    name: 'AITesting',
-    setup() {
-      const form = reactive({
-        projectPath: '',
-        analysisDepth: 3,
-      });
-  
-      const analyzing = ref(false);
-      const analysisProgress = ref(0);
-      const analysisComplete = ref(false);
-      const activeNames = ref([0]);
-      const documentSections = ref([]);
-      const exportDialogVisible = ref(false);
-      const exportForm = reactive({
-        format: 'md'
-      });
-  
-      const startAnalysis = () => {
-        if (!form.projectPath) {
-          ElMessage.warning('请输入项目路径');
-          return;
-        }
-        analyzing.value = true;
-        analysisProgress.value = 0;
-        analysisComplete.value = false;
-        documentSections.value = [];
-  
-        // 模拟分析过程
-        const interval = setInterval(() => {
-          analysisProgress.value += 10;
-          if (analysisProgress.value >= 100) {
-            clearInterval(interval);
-            analyzing.value = false;
-            analysisComplete.value = true;
-            generateMockResults();
-          }
-        }, 500);
-      };
-  
-      const progressFormat = (percentage) => {
-        return percentage === 100 ? '完成' : `${percentage}%`;
-      };
-  
-      const generateMockResults = () => {
-        documentSections.value = [
-          { title: '1. 系统概览', content: '<p>这是系统概览的内容...</p>' },
-          { title: '2. 保单提交流程', content: '<p>这是保单提交流程的内容...</p>' },
-          { title: '3. 保单签发', content: '<p>这是保单签发的内容...</p>' },
-          { title: '4. 理赔处理', content: '<p>这是理赔处理的内容...</p>' },
-          { title: '5. 报销工作流', content: '<p>这是报销工作流的内容...</p>' },
-        ];
-      };
-  
-      const exportDocument = () => {
-        exportDialogVisible.value = true;
-      };
-  
-      const confirmExport = () => {
-        ElMessage.success(`文档已导出为 ${exportForm.format.toUpperCase()} 格式`);
-        exportDialogVisible.value = false;
-      };
-  
-      return {
-        form,
-        analyzing,
-        analysisProgress,
-        analysisComplete,
-        activeNames,
-        documentSections,
-        exportDialogVisible,
-        exportForm,
-        startAnalysis,
-        progressFormat,
-        exportDocument,
-        confirmExport,
-      };
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .ai-testing-container {
-    padding: 20px;
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive, nextTick, onMounted, watch } from 'vue';
+import axios from 'axios';
+import { ElMessage } from 'element-plus';
+
+const form = reactive({
+  projectPath: localStorage.getItem('projectPath') || '',
+});
+
+const questionForm = reactive({
+  question: '',
+});
+
+const chatHistory = ref(JSON.parse(localStorage.getItem('chatHistory')) || []);
+const initializing = ref(false);
+const analyzing = ref(false);
+const initialized = ref(localStorage.getItem('initialized') === 'true');
+const chatHistoryRef = ref(null);
+
+// 监听 projectPath 的变化并保存到 localStorage
+watch(() => form.projectPath, (newPath) => {
+  localStorage.setItem('projectPath', newPath);
+});
+
+// 监听 chatHistory 的变化并保存到 localStorage
+watch(chatHistory, (newHistory) => {
+  localStorage.setItem('chatHistory', JSON.stringify(newHistory));
+}, { deep: true });
+
+// 监听 initialized 的变化并保存到 localStorage
+watch(initialized, (newValue) => {
+  localStorage.setItem('initialized', newValue);
+});
+
+const initializeSystem = async () => {
+  if (!form.projectPath) {
+    ElMessage.warning('请输入项目路径');
+    return;
   }
-  .control-panel, .result-panel {
-    margin-bottom: 20px;
+  initializing.value = true;
+  try {
+    await axios.post('http://localhost:5000/initialize', { projectPath: form.projectPath });
+    ElMessage.success('系统初始化成功');
+    initialized.value = true;
+  } catch (error) {
+    console.error('初始化失败:', error);
+    ElMessage.error('系统初始化失败，请稍后再试');
+  } finally {
+    initializing.value = false;
   }
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+};
+
+const askQuestion = async () => {
+  if (!questionForm.question) {
+    ElMessage.warning('请输入问题');
+    return;
   }
-  </style>
+  analyzing.value = true;
+  chatHistory.value.push({ type: 'user', content: questionForm.question });
+  try {
+    const response = await axios.post('http://localhost:5000/analyze', { question: questionForm.question });
+    chatHistory.value.push({ type: 'ai', content: response.data.answer });
+    questionForm.question = ''; // 清空输入框
+    await nextTick();
+    scrollToBottom();
+  } catch (error) {
+    console.error('分析失败:', error);
+    ElMessage.error('获取答案失败，请稍后再试');
+  } finally {
+    analyzing.value = false;
+  }
+};
+
+const scrollToBottom = () => {
+  if (chatHistoryRef.value) {
+    chatHistoryRef.value.scrollTop = chatHistoryRef.value.scrollHeight;
+  }
+};
+
+// 在组件挂载时，如果系统已初始化，则重新初始化
+onMounted(async () => {
+  if (initialized.value) {
+    try {
+      await initializeSystem();
+    } catch (error) {
+      console.error('重新初始化失败:', error);
+      ElMessage.error('重新初始化失败，请手动初始化系统');
+      initialized.value = false;
+    }
+  }
+});
+</script>
+
+<style scoped>
+.ai-testing {
+  padding: 20px;
+}
+.chat-container {
+  margin-top: 20px;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.chat-history {
+  height: 400px;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: #f9f9f9;
+}
+.message {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 4px;
+}
+.message.user {
+  background-color: #e6f7ff;
+}
+.message.ai {
+  background-color: #f0f9eb;
+}
+</style>

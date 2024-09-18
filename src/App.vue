@@ -132,7 +132,7 @@ export default {
     ElDropdownMenu,
     ElTable,
     ElTableColumn,
-    homeEchartsVue,
+    homeEchartsVue
   },
 
   setup() {
